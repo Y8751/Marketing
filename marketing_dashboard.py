@@ -144,35 +144,38 @@ if uploaded_file:
     # ========================
     st.subheader("💡 Budget Allocation Recommendations")
 
-    def budget_recommendations(camp_perf, channel_perf, roas_high=2.0, roas_low=1.0):
-        recs = []
+    # ========================
+# Budget Allocation Recommendations - Improved
+# ========================
+st.subheader("💡 Budget Allocation Recommendations (Detailed)")
 
-        # Campaigns
-        strong_campaigns = camp_perf[camp_perf["ROAS"] > roas_high]
-        if not strong_campaigns.empty:
-            recs.append(f"✅ Increase budget for high-performing campaigns: {', '.join(strong_campaigns['Campaign_Name'].tolist())}")
+def detailed_budget_recommendations(camp_perf, channel_perf):
+    recs = []
 
-        weak_campaigns = camp_perf[camp_perf["ROAS"] < roas_low]
-        if not weak_campaigns.empty:
-            recs.append(f"⚠️ Reduce/stop budget for low-performing campaigns: {', '.join(weak_campaigns['Campaign_Name'].tolist())}")
+    # Campaigns
+    for _, row in camp_perf.iterrows():
+        if row["ROAS"] > 2.0:
+            recs.append(f"✅ Campaign '{row['Campaign_Name']}' is high-performing. Consider increasing budget.")
+        elif row["ROAS"] < 1.0:
+            recs.append(f"⚠️ Campaign '{row['Campaign_Name']}' is low-performing. Consider reducing budget.")
+        else:
+            recs.append(f"ℹ️ Campaign '{row['Campaign_Name']}' is medium-performing. Monitor performance.")
 
-        # Channels
-        strong_channels = channel_perf[channel_perf["ROAS"] > roas_high]
-        if not strong_channels.empty:
-            recs.append(f"✅ Focus more investment on strong channels: {', '.join(strong_channels['Marketing_Channel'].tolist())}")
+    # Channels
+    for _, row in channel_perf.iterrows():
+        if row["ROAS"] > 2.0:
+            recs.append(f"✅ Channel '{row['Marketing_Channel']}' is strong. Consider more investment.")
+        elif row["ROAS"] < 1.0:
+            recs.append(f"⚠️ Channel '{row['Marketing_Channel']}' is weak. Consider reducing investment.")
+        else:
+            recs.append(f"ℹ️ Channel '{row['Marketing_Channel']}' is medium-performing. Monitor investment.")
 
-        weak_channels = channel_perf[channel_perf["ROAS"] < roas_low]
-        if not weak_channels.empty:
-            recs.append(f"⚠️ Reconsider budget for weak channels: {', '.join(weak_channels['Marketing_Channel'].tolist())}")
+    return recs
 
-        if not recs:
-            recs.append("ℹ️ No major budget reallocation recommendations at this time.")
+recommendations = detailed_budget_recommendations(camp_perf, channel_perf)
+for r in recommendations:
+    st.write("- " + r)
 
-        return recs
-
-    recommendations = budget_recommendations(camp_perf, channel_perf)
-    for r in recommendations:
-        st.write("- " + r)
 
 else:
     st.info("📂 Upload your Excel file to start the analysis.")
