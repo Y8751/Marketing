@@ -27,17 +27,6 @@ if uploaded_file:
     df["CPA"] = df["Total_Spend"] / df["Conversions"]
     df["ROAS"] = df["Revenue_Generated"] / df["Total_Spend"]
 
-    # ========================
-    # 4. Sidebar Filters
-    # ========================
-    channels = ["All"] + sorted(df["Marketing_Channel"].dropna().unique())
-    choice = st.sidebar.selectbox("Filter by Channel", channels)
-    if choice != "All":
-        df = df[df["Marketing_Channel"] == choice]
-
-    top_n_campaigns = st.sidebar.slider("Top N Campaigns", 1, 20, 5)
-    top_n_channels = st.sidebar.slider("Top N Channels", 1, 10, 3)
-    months_to_show = st.sidebar.slider("Months for Time Analysis", 1, 36, 12)
 
     # ========================
     # 5. KPI Summary
