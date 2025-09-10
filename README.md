@@ -53,7 +53,9 @@ The dataset includes:
 
 ### ▶️ Run in Jupyter Notebook  
 1. Open `marketing_dashboard_step_by_step.ipynb`.  
-2. Run all cells to generate KPIs and visualizations.  
+2. Run all cells to generate KPIs and visualizations.
+
+### And this is the link of the app : https://marketing-w9l9p6hy2f7qiurse7cqmh.streamlit.app/   
 
 ### ▶️ Run as Streamlit App  
 1. Save the code in a file, e.g., `marketing_dashboard.py`.  
