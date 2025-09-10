@@ -90,3 +90,66 @@ if uploaded_file:
 
 else:
     st.info("📂 Upload your Excel file to start the analysis.")
+
+    # ===============================
+    # 1. Top-Performing Campaigns & Channels
+    # ===============================
+    st.subheader("🏆 Top-Performing Campaigns & Channels")
+
+    top_campaigns = camp_perf.sort_values("ROAS", ascending=False).head(5)
+    st.write("🔝 Top 5 Campaigns by ROAS:")
+    st.dataframe(top_campaigns[["Campaign_Name", "Conversions", "Revenue_Generated", "ROAS"]])
+
+    top_channels = channel_perf.sort_values("ROAS", ascending=False).head(3)
+    st.write("🔝 Top Channels by ROAS:")
+    st.dataframe(top_channels[["Marketing_Channel", "Conversions", "Revenue_Generated", "ROAS"]])
+
+    # ===============================
+    # 2. Demographic Insights
+    # ===============================
+    st.subheader("👥 Demographic Insights")
+
+    top_demo = demo_perf.sort_values("Conversions", ascending=False).head(5)
+    st.write("🔝 Top 5 Demographics by Conversions:")
+    st.dataframe(top_demo[["Age_Group", "Gender", "Conversions", "Revenue_Generated"]])
+
+    # ===============================
+    # 3. Seasonal / Temporal Trends
+    # ===============================
+    st.subheader("📅 Seasonal / Temporal Trends")
+
+    best_months = time_perf.sort_values("ROAS", ascending=False).head(3)
+    st.write("🔝 Best Months by ROAS:")
+    st.dataframe(best_months[["Month", "Conversions", "Revenue_Generated", "ROAS"]])
+
+    # ===============================
+    # 4. Budget Allocation Recommendations
+    # ===============================
+    st.subheader("💡 Budget Allocation Recommendations")
+
+    recs = []
+
+    # حملات قوية (ROAS > 2)
+    strong_campaigns = camp_perf[camp_perf["ROAS"] > 2]
+    if not strong_campaigns.empty:
+        recs.append(f"✅ Increase budget for high-performing campaigns: {', '.join(strong_campaigns['Campaign_Name'].tolist())}")
+
+    # حملات ضعيفة (ROAS < 1)
+    weak_campaigns = camp_perf[camp_perf["ROAS"] < 1]
+    if not weak_campaigns.empty:
+        recs.append(f"⚠️ Reduce/stop budget for low-performing campaigns: {', '.join(weak_campaigns['Campaign_Name'].tolist())}")
+
+    # قنوات قوية وضعيفة
+    strong_channels = channel_perf[channel_perf["ROAS"] > 2]
+    if not strong_channels.empty:
+        recs.append(f"✅ Focus more investment on strong channels: {', '.join(strong_channels['Marketing_Channel'].tolist())}")
+
+    weak_channels = channel_perf[channel_perf["ROAS"] < 1]
+    if not weak_channels.empty:
+        recs.append(f"⚠️ Reconsider budget for weak channels: {', '.join(weak_channels['Marketing_Channel'].tolist())}")
+
+    if recs:
+        for r in recs:
+            st.write("- " + r)
+    else:
+        st.info("No major budget reallocation recommendations at this time.")
