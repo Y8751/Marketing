@@ -8,7 +8,7 @@ import streamlit as st
 
 # Page setup
 st.set_page_config(page_title="Marketing Dashboard", layout="wide")
-st.title("Marketing Campaign Performance Dashboard")
+st.title("📊 Marketing Campaign Performance Dashboard")
 
 # ========================
 # 2. File Upload
