@@ -25,7 +25,10 @@ if uploaded_file:
     df["Conversion_Rate"] = df["Conversions"] / df["Clicks"]
     df["CPC"] = df["Total_Spend"] / df["Clicks"]
     df["CPA"] = df["Total_Spend"] / df["Conversions"]
-    df["ROAS"] = df["Revenue_Generated"] / df["Total_Spend"]
+    df["ROAS"] = df["Revenue_Generated"] / df["Total_Spend"] 
+
+    channels = ["All"] + sorted(df["Marketing_Channel"].dropna().unique())
+    choice = st.sidebar.selectbox("Filter by Channel", channels)
 
 
     # ========================
